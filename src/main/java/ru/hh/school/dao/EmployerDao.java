@@ -16,9 +16,14 @@ public class EmployerDao extends GenericDao {
    * <p>
    * https://vladmihalcea.com/the-best-way-to-handle-the-lazyinitializationexception/
    */
+
   public Employer getEager(int employerId) {
     return getSession()
-        .createQuery("from Employer employer", Employer.class)
+        .createQuery(
+                "from Employer employer " +
+                "join fetch employer.vacancies " +
+                "where employer.id =:id ", Employer.class)
+            .setParameter("id", employerId)
         .getSingleResult();
   }
 
